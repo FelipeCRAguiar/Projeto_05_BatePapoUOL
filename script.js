@@ -6,14 +6,17 @@ function carregarSite() {
     entrada.then(puxarMensagens)
 }
 function carregarMensagens(resposta) {
+    document.querySelector(".conteudo").innerHTML = ""
     let mensagens = resposta.data
-    for (let i = 0 ; i < mensagens.length ; i++) {
-        document.querySelector(".conteudo").innerHTML += `
-        <div class="mensagens ${mensagens[i].type}">
-            <strong>(${mensagens[i].time})</strong> &nbsp <b>${mensagens[i].from}</b>: &nbsp ${mensagens[i].text}
-        </div>`
-        let listamnsg = document.querySelectorAll(".mensagens")
-        listamnsg[i].scrollIntoView()
+    for (let i=0;i<mensagens.length;i++) {
+        if (mensagens[i].to === nomeUsuario || mensagens[i].to === "Todos") {
+            document.querySelector(".conteudo").innerHTML += `
+            <div class="mensagens ${mensagens[i].type}">
+                <strong>${mensagens[i].time}</strong> <b>${mensagens[i].from}</b>: ${mensagens[i].text}
+            </div>`
+            let listamnsg = document.querySelectorAll(".mensagens")
+            listamnsg[i].scrollIntoView()
+        }
     }
 }
 function erro(erro) {
@@ -21,7 +24,11 @@ function erro(erro) {
 }
 function puxarMensagens() {
     const mensagens = axios.get("https://mock-api.driven.com.br/api/v4/uol/messages")
-    mensagens.catch(erro)
     mensagens.then(carregarMensagens)  
 }
+function statusOnline() {
+    axios.post("https://mock-api.driven.com.br/api/v4/uol/status", {name: nomeUsuario})
+}
 carregarSite()
+setInterval(statusOnline, 5000)
+setInterval(puxarMensagens, 3000)
