@@ -20,7 +20,7 @@ function carregarMensagens(resposta) {
     }
 }
 function erro(erro) {
-    console.log(erro.response)
+    window.location.reload()
 }
 function puxarMensagens() {
     const mensagens = axios.get("https://mock-api.driven.com.br/api/v4/uol/messages")
@@ -28,6 +28,12 @@ function puxarMensagens() {
 }
 function statusOnline() {
     axios.post("https://mock-api.driven.com.br/api/v4/uol/status", {name: nomeUsuario})
+}
+function enviarMensagem() {
+    let input = document.querySelector("footer input")
+    const mensagem = axios.post("https://mock-api.driven.com.br/api/v4/uol/messages", {from: nomeUsuario, to: "Todos",text: input.value, type: "message"})
+    mensagem.then(carregarMensagens)
+    mensagem.catch(erro)
 }
 carregarSite()
 setInterval(statusOnline, 5000)
