@@ -11,7 +11,7 @@ function carregarMensagens(resposta) {
     for (let i=0;i<mensagens.length;i++) {
         if (mensagens[i].to === nomeUsuario || mensagens[i].to === "Todos") {
             document.querySelector(".conteudo").innerHTML += `
-            <div class="mensagens ${mensagens[i].type}">
+            <div class="mensagens ${mensagens[i].type}" data-identifier="message">
                 <strong>${mensagens[i].time}</strong> <b>${mensagens[i].from}</b>: ${mensagens[i].text}
             </div>`
             let listamnsg = document.querySelectorAll(".mensagens")
